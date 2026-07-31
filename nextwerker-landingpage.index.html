@@ -1,0 +1,1874 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>die nextwerker — Handwerk bleibt Handwerk. Der Rest wird einfacher.</title>
+<meta name="description" content="KI-Beratung und Umsetzung für Handwerksbetriebe im Raum Stuttgart: Anfragen, Angebote und Rechnungen einfacher machen – Technik im Hintergrund, Mensch im Vordergrund.">
+<meta property="og:title" content="die nextwerker — Handwerk bleibt Handwerk. Der Rest wird einfacher.">
+<meta property="og:description" content="KI-Beratung und Umsetzung für Handwerksbetriebe im Raum Stuttgart. Technik im Hintergrund, Mensch im Vordergrund.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23B8562E'/%3E%3Ctext x='32' y='44' font-family='Georgia, serif' font-size='38' font-weight='700' fill='%23F3EEE4' text-anchor='middle'%3En%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F3EEE4;
+    --cream-dim: #ECE5D6;
+    --anthracite: #2B2925;
+    --terracotta: #B8562E;
+    --terracotta-dark: #9A4423;
+    --mustard: #C99A3A;
+    --grey: #6B645C;
+    --line: rgba(43, 41, 37, 0.12);
+    --radius: 4px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--cream);
+    color: var(--anthracite);
+    font-family: 'Inter', sans-serif;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 0 28px;
+  }
+
+  h1, h2, h3 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.08;
+  }
+
+  .mono {
+    font-family: 'IBM Plex Mono', monospace;
+    letter-spacing: 0.02em;
+  }
+
+  a { color: inherit; }
+
+  /* ---------- HEADER ---------- */
+  header {
+    padding: 18px 0;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: var(--cream);
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.2s ease;
+  }
+  header.scrolled { border-bottom-color: var(--line); }
+  header .wrap {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .wordmark {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    letter-spacing: -0.01em;
+  }
+  .wordmark span { color: var(--terracotta); }
+  .header-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--terracotta-dark);
+    text-decoration: none;
+    display: none;
+    padding: 8px 14px;
+    border: 1px solid var(--terracotta);
+    border-radius: 20px;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+  .header-tag:hover { background: var(--terracotta); color: #fff; }
+  @media (min-width: 640px) { .header-tag { display: block; } }
+
+  /* ---------- HERO ---------- */
+  .hero {
+    padding: 72px 0 40px;
+  }
+  .hero h1 {
+    font-size: clamp(34px, 6vw, 62px);
+    max-width: 780px;
+  }
+  .hero h1 .fade {
+    color: var(--grey);
+  }
+  .hero p.lede {
+    margin-top: 22px;
+    max-width: 560px;
+    font-size: 18px;
+    color: var(--grey);
+  }
+  .trust-accent {
+    display: inline-block;
+    margin-top: 8px;
+    color: var(--terracotta-dark);
+    font-weight: 500;
+  }
+
+  /* ---------- INTRO + PROCESS CARD (signature element) ---------- */
+  .intro-panel {
+    margin-top: 48px;
+    max-width: 640px;
+  }
+  .intro-panel p {
+    font-size: 15.5px;
+    color: var(--grey);
+  }
+  .intro-panel p + p { margin-top: 10px; }
+
+  .process-card {
+    margin-top: 28px;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 30px 32px;
+    box-shadow: 0 1px 2px rgba(43,41,37,0.04);
+  }
+  .process-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    color: var(--grey);
+    padding-bottom: 16px;
+    margin-bottom: 22px;
+    border-bottom: 1px solid var(--line);
+  }
+  .voice-player {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .play-btn {
+    flex-shrink: 0;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: none;
+    background: var(--terracotta);
+    color: #fff;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s ease, transform 0.1s ease;
+  }
+  .play-btn:hover:not(:disabled) { background: var(--terracotta-dark); }
+  .play-btn:active:not(:disabled) { transform: scale(0.95); }
+  .play-btn:disabled { opacity: 0.55; cursor: default; }
+  .play-btn:focus-visible { outline: 2px solid var(--anthracite); outline-offset: 2px; }
+  .waveform-wrap {
+    position: relative;
+    flex: 1;
+    height: 32px;
+  }
+  .waveform-layer {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    gap: 2.5px;
+  }
+  .waveform-layer .bar {
+    flex: 1;
+    border-radius: 2px;
+    background: var(--line);
+    min-width: 2px;
+  }
+  .waveform-layer.progress {
+    clip-path: inset(0 100% 0 0);
+    transition: clip-path 2.2s linear;
+  }
+  .waveform-layer.progress .bar { background: var(--terracotta); }
+  .voice-duration {
+    flex-shrink: 0;
+    font-size: 11px;
+    color: var(--grey);
+    width: 76px;
+    text-align: right;
+  }
+
+  .voice-transcript {
+    font-family: 'Inter', sans-serif;
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: var(--grey);
+    font-style: italic;
+    margin-top: 20px;
+    padding-top: 18px;
+    border-top: 1px dashed var(--line);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+  .voice-transcript.show { opacity: 1; }
+
+  .process-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin: 4px 0 20px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--grey);
+    height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  .process-divider.show {
+    height: auto;
+    opacity: 1;
+    margin: 18px 0 20px;
+  }
+  .dot-flow { display: inline-flex; gap: 4px; }
+  .dot-flow i {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--terracotta);
+    display: inline-block;
+    animation: dotPulse 1.2s infinite ease-in-out;
+  }
+  .dot-flow i:nth-child(2) { animation-delay: 0.2s; }
+  .dot-flow i:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes dotPulse {
+    0%, 80%, 100% { opacity: 0.25; }
+    40% { opacity: 1; }
+  }
+
+  .sorted-rows-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px 28px;
+  }
+  @media (min-width: 640px) {
+    .sorted-rows-grid { grid-template-columns: 1fr 1fr; }
+  }
+  .sorted-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 0.35s ease, transform 0.35s ease;
+  }
+  .sorted-row.show { opacity: 1; transform: translateY(0); }
+  .sorted-row .tag-chip {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--terracotta-dark);
+    background: var(--cream-dim);
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    padding: 2px 6px;
+    width: 68px;
+    flex-shrink: 0;
+    text-align: center;
+  }
+  .sorted-row .v {
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+  }
+
+  /* ---------- JOURNEY STATIONS ---------- */
+  .journey-stepper {
+    display: flex;
+    align-items: stretch;
+    gap: 8px;
+    margin-bottom: 40px;
+  }
+  .stepper-item {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--anthracite);
+    text-decoration: none;
+    padding: 14px 10px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: #fff;
+    transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease, transform 0.1s ease;
+  }
+  .stepper-item:hover {
+    background: var(--cream-dim);
+    border-color: var(--terracotta);
+    color: var(--terracotta-dark);
+  }
+  .stepper-item:active { transform: scale(0.98); }
+  .stepper-item:focus-visible { outline: 2px solid var(--terracotta); outline-offset: 2px; }
+  .stepper-arrow {
+    display: flex;
+    align-items: center;
+    color: var(--line);
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+  @media (max-width: 640px) {
+    .journey-stepper { flex-direction: column; }
+    .stepper-arrow { display: none; }
+  }
+
+  .journey-station {
+    padding-top: 40px;
+    margin-top: 40px;
+    border-top: 1px solid var(--line);
+    scroll-margin-top: 24px;
+  }
+  .journey-station:first-child {
+    padding-top: 0;
+    margin-top: 0;
+    border-top: none;
+  }
+  .journey-station > .tag.mono {
+    font-size: 12px;
+    color: var(--terracotta-dark);
+  }
+  .journey-station > h3 {
+    font-size: 19px;
+    margin-top: 8px;
+    margin-bottom: 8px;
+  }
+  .journey-station > .demo-copy {
+    max-width: 560px;
+    margin-bottom: 22px;
+  }
+
+  /* ---------- APPROACH SECTION ---------- */
+  .section {
+    padding: 88px 0;
+  }
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 44px;
+  }
+  .section-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    color: var(--terracotta);
+  }
+  .section h2 {
+    font-size: clamp(24px, 3.5vw, 34px);
+  }
+
+  .section-intro {
+    color: var(--grey);
+    font-size: 15px;
+    margin-top: -28px;
+    margin-bottom: 28px;
+    max-width: 460px;
+  }
+
+  .approach-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  @media (min-width: 800px) {
+    .approach-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+  .approach-item {
+    background: var(--cream);
+    padding: 32px 28px;
+    position: relative;
+  }
+  @media (min-width: 800px) {
+    .approach-item:not(:last-child)::after {
+      content: '→';
+      position: absolute;
+      top: 32px;
+      right: -13px;
+      z-index: 3;
+      width: 26px;
+      height: 26px;
+      background: var(--cream);
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      color: var(--terracotta-dark);
+      font-family: 'IBM Plex Mono', monospace;
+    }
+  }
+  .approach-item .tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--terracotta-dark);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .approach-item h3 {
+    font-size: 21px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+  .approach-item p {
+    color: var(--grey);
+    font-size: 15px;
+  }
+
+  /* ---------- DEMO TABS ---------- */
+  .demo-tabs {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .demo-tab {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    background: none;
+    border: none;
+    padding: 12px 18px;
+    color: var(--grey);
+    cursor: pointer;
+    position: relative;
+    top: 1px;
+  }
+  .demo-tab.active {
+    color: var(--terracotta-dark);
+    border-bottom: 2px solid var(--terracotta);
+  }
+  .demo-tab:focus-visible {
+    outline: 2px solid var(--terracotta);
+    outline-offset: 2px;
+  }
+
+  .demo-panel {
+    display: none;
+    padding-top: 36px;
+  }
+  .demo-panel.active { display: block; }
+
+  .demo-panel-inner {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 28px;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 32px;
+  }
+  @media (min-width: 800px) {
+    .demo-panel-inner { grid-template-columns: 1fr 1fr; }
+  }
+
+  .demo-left .tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--terracotta-dark);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .demo-left h3 { font-size: 21px; margin-top: 10px; margin-bottom: 8px; }
+  .demo-copy { color: var(--grey); font-size: 14px; margin-bottom: 18px; }
+
+  .field-label {
+    font-size: 11px;
+    color: var(--grey);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 6px;
+  }
+  .demo-textarea, .demo-input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    background: var(--cream);
+    color: var(--anthracite);
+    resize: none;
+  }
+  .demo-textarea:focus, .demo-input:focus {
+    outline: 2px solid var(--terracotta);
+    outline-offset: 1px;
+  }
+  .demo-btn {
+    margin-top: 14px;
+    padding: 11px 20px;
+    border: none;
+    border-radius: 6px;
+    background: var(--terracotta);
+    color: #fff;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  .demo-btn:hover { background: var(--terracotta-dark); }
+  .demo-btn:focus-visible { outline: 2px solid var(--anthracite); outline-offset: 2px; }
+
+  .chat-input-row { display: flex; gap: 8px; }
+  .chat-input-row .demo-btn { margin-top: 0; white-space: nowrap; }
+
+  .demo-right { display: flex; align-items: stretch; }
+
+  /* Angebot doc card */
+  .doc-card {
+    background: var(--cream-dim);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 22px;
+    width: 100%;
+  }
+  .doc-head {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: var(--grey);
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 14px;
+  }
+  .status-badge { color: var(--grey); }
+  .status-badge.ready { color: var(--terracotta-dark); }
+  .doc-line {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    padding: 6px 0;
+  }
+  .doc-line.total {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    border-top: 1px solid var(--line);
+    margin-top: 8px;
+    padding-top: 12px;
+  }
+  .doc-foot {
+    margin-top: 14px;
+    font-size: 11px;
+    color: var(--grey);
+  }
+
+  /* Chat card */
+  .chat-card {
+    background: var(--cream-dim);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    min-height: 240px;
+  }
+  .chat-head {
+    padding: 10px 16px;
+    font-size: 11px;
+    color: var(--grey);
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .busy-indicator {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 10.5px;
+    color: var(--terracotta-dark);
+  }
+  .busy-indicator .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--terracotta);
+    display: inline-block;
+  }
+  .chat-body {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex: 1;
+  }
+  .bubble {
+    max-width: 80%;
+    padding: 9px 13px;
+    border-radius: 12px;
+    font-size: 13.5px;
+    line-height: 1.4;
+  }
+  .bubble.bot {
+    background: #fff;
+    border: 1px solid var(--line);
+    align-self: flex-start;
+    border-bottom-left-radius: 3px;
+  }
+  .bubble.user {
+    background: var(--terracotta);
+    color: #fff;
+    align-self: flex-end;
+    border-bottom-right-radius: 3px;
+  }
+  .bubble.image-bubble {
+    padding: 6px;
+    align-self: flex-end;
+  }
+  .image-thumb {
+    background: #fff;
+    border-radius: 7px;
+    padding: 10px 10px 6px;
+    width: 128px;
+  }
+  .image-caption {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9.5px;
+    color: rgba(255,255,255,0.85);
+    margin-top: 5px;
+    padding: 0 2px;
+  }
+  .bubble.system {
+    align-self: center;
+    background: none;
+    border: 1px dashed var(--line);
+    color: var(--grey);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    text-align: center;
+    max-width: 90%;
+  }
+  .bubble.typing {
+    background: #fff;
+    border: 1px solid var(--line);
+    align-self: flex-start;
+    color: var(--grey);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+  }
+
+  .urgency-meter {
+    align-self: center;
+    width: 92%;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 10px 14px;
+  }
+  .um-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    color: var(--grey);
+    margin-bottom: 7px;
+  }
+  .bar-track {
+    height: 5px;
+    background: var(--cream-dim);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .bar-fill {
+    height: 100%;
+    width: 0%;
+    background: var(--grey);
+    border-radius: 3px;
+    transition: width 0.85s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .bar-fill.high { background: var(--terracotta); }
+  .bar-fill.low { background: var(--grey); }
+
+  /* Rechnung: incoming beleg strip + invoice card */
+  .invoice-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+  }
+  .incoming-beleg {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--cream-dim);
+    border: 1px dashed var(--line);
+    border-radius: 6px;
+    padding: 10px 16px;
+    font-size: 12px;
+    color: var(--grey);
+  }
+  .scan-bar {
+    position: absolute;
+    top: 0;
+    left: -30%;
+    width: 30%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(184,86,46,0.4), transparent);
+    pointer-events: none;
+    opacity: 0;
+  }
+  .incoming-beleg.scanning .scan-bar {
+    opacity: 1;
+    animation: scanSweep 0.9s ease-in-out;
+  }
+  @keyframes scanSweep {
+    from { left: -30%; }
+    to { left: 100%; }
+  }
+  #incomingAmount { color: var(--anthracite); font-weight: 600; }
+  .invoice-card { padding: 22px; }
+  .invoice-meta {
+    font-size: 11px;
+    color: var(--grey);
+    line-height: 1.6;
+    padding-bottom: 14px;
+    margin-bottom: 14px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .doc-placeholder {
+    color: var(--grey);
+    font-size: 11.5px;
+    text-align: center;
+    padding: 24px 10px;
+    opacity: 0.7;
+  }
+  .doc-lines { display: none; }
+  .doc-lines.visible { display: block; }
+  .doc-line span:first-child {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .price-note {
+    font-size: 10px;
+    color: var(--terracotta-dark);
+  }
+
+  .channel-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+  .channel-view { display: none; }
+  .channel-view.active { display: block; }
+  .chat-placeholder {
+    color: var(--grey);
+    font-size: 11px;
+    text-align: center;
+    padding: 30px 10px;
+    opacity: 0.7;
+  }
+
+  .quick-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+  .chip {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11.5px;
+    padding: 7px 12px;
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    background: var(--cream);
+    color: var(--grey);
+    cursor: pointer;
+  }
+  .chip.active {
+    background: var(--anthracite);
+    color: var(--cream);
+    border-color: var(--anthracite);
+  }
+  .chip:focus-visible {
+    outline: 2px solid var(--terracotta);
+    outline-offset: 2px;
+  }
+
+  .scan-status {
+    margin-top: 16px;
+    padding: 14px 16px;
+    border-radius: 6px;
+    background: var(--cream-dim);
+    border-left: 3px solid var(--terracotta);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--anthracite);
+    min-height: 17px;
+    display: none;
+  }
+  .scan-status.show { display: block; }
+
+  /* ---------- AKTE COMPARE ---------- */
+  .akte-compare {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+    align-items: center;
+  }
+  @media (min-width: 860px) {
+    .akte-compare { grid-template-columns: 1fr auto 1.35fr; }
+  }
+  .akte-before {
+    background: var(--cream-dim);
+    border: 1px dashed var(--line);
+    border-radius: 8px;
+    padding: 26px 28px;
+  }
+  .akte-before-label {
+    font-size: 11px;
+    color: var(--grey);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 14px;
+  }
+  .scatter-item {
+    font-size: 13.5px;
+    color: var(--grey);
+    padding: 9px 0;
+    border-bottom: 1px dashed var(--line);
+  }
+  .scatter-item:last-child { border-bottom: none; }
+  .akte-arrow {
+    text-align: center;
+    font-size: 20px;
+    color: var(--terracotta);
+    display: none;
+  }
+  @media (min-width: 860px) { .akte-arrow { display: block; } }
+  .akte-after {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 26px 28px;
+  }
+  .akte-after-label {
+    font-size: 12px;
+    color: var(--terracotta-dark);
+    margin-bottom: 16px;
+  }
+  .akte-step {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    padding: 11px 0;
+    border-bottom: 1px solid var(--line);
+    font-size: 13.5px;
+  }
+  .akte-step:last-child { border-bottom: none; }
+  .akte-step .check {
+    color: var(--terracotta);
+    width: 14px;
+    flex-shrink: 0;
+  }
+  .akte-step.pending .check { color: var(--grey); }
+  .akte-step.pending .step-label,
+  .akte-step.pending .step-detail { color: var(--grey); }
+  .akte-step .step-label {
+    font-weight: 600;
+    min-width: 150px;
+  }
+  .akte-step .step-detail {
+    color: var(--grey);
+    font-size: 12.5px;
+  }
+
+  /* ---------- PROCESS ---------- */
+  .process-list {
+    border-top: 1px solid var(--line);
+  }
+  .process-row {
+    display: grid;
+    grid-template-columns: 56px 1fr;
+    gap: 20px;
+    padding: 26px 0;
+    border-bottom: 1px solid var(--line);
+    align-items: baseline;
+  }
+  .process-row .step-num {
+    font-size: 10px;
+    color: var(--terracotta);
+    padding-top: 6px;
+  }
+  .process-row h3 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .process-row p { color: var(--grey); font-size: 15px; max-width: 560px; }
+
+  /* ---------- ABOUT ---------- */
+  .about {
+    background: var(--anthracite);
+    color: var(--cream);
+    border-radius: 12px;
+    padding: 48px 36px;
+  }
+  .about .eyebrow2 {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--mustard);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .about .eyebrow2::before {
+    content: '';
+    width: 18px;
+    height: 2px;
+    background: var(--mustard);
+    display: inline-block;
+  }
+  .about h2 { color: var(--cream); font-size: 26px; margin-bottom: 16px; }
+  .about p { color: rgba(243,238,228,0.78); font-size: 16px; max-width: 620px; }
+  .about p + p { margin-top: 12px; }
+
+  /* ---------- EMAIL CAPTURE ---------- */
+  .capture {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 48px 36px;
+    text-align: center;
+  }
+  .capture h2 { font-size: clamp(24px, 3.5vw, 32px); }
+  .capture p { color: var(--grey); margin-top: 12px; max-width: 460px; margin-left: auto; margin-right: auto; }
+  .capture-form {
+    margin-top: 28px;
+    display: flex;
+    gap: 10px;
+    max-width: 420px;
+    margin-left: auto;
+    margin-right: auto;
+    flex-direction: column;
+  }
+  @media (min-width: 480px) { .capture-form { flex-direction: row; } }
+  .capture-form input[type="email"] {
+    flex: 1;
+    padding: 13px 16px;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    background: var(--cream);
+    color: var(--anthracite);
+  }
+  .capture-form input[type="email"]:focus {
+    outline: 2px solid var(--terracotta);
+    outline-offset: 1px;
+  }
+  .capture-form button {
+    padding: 13px 22px;
+    border: none;
+    border-radius: 6px;
+    background: var(--terracotta);
+    color: #fff;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    cursor: pointer;
+    transition: background 0.15s ease;
+    white-space: nowrap;
+  }
+  .capture-form button:hover { background: var(--terracotta-dark); }
+  .capture-form button:focus-visible { outline: 2px solid var(--anthracite); outline-offset: 2px; }
+  .capture-note {
+    margin-top: 16px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--grey);
+  }
+  .consent-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin-top: 18px;
+    font-size: 12.5px;
+    color: var(--grey);
+    text-align: left;
+    max-width: 420px;
+    margin-left: auto;
+    margin-right: auto;
+    cursor: pointer;
+  }
+  .consent-label input {
+    margin-top: 2px;
+    accent-color: var(--terracotta);
+    flex-shrink: 0;
+  }
+  .datenschutz-note {
+    margin-top: 22px;
+    padding-top: 18px;
+    border-top: 1px solid var(--line);
+    font-size: 11.5px;
+    color: var(--grey);
+    max-width: 460px;
+    margin-left: auto;
+    margin-right: auto;
+    scroll-margin-top: 24px;
+  }
+  .success-msg {
+    display: none;
+    margin-top: 22px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 14px;
+    color: var(--terracotta-dark);
+  }
+  .success-msg.show { display: block; }
+
+  /* ---------- FAQ ---------- */
+  .faq-list {
+    border-top: 1px solid var(--line);
+  }
+  .faq-item {
+    border-bottom: 1px solid var(--line);
+  }
+  .faq-question {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    background: none;
+    border: none;
+    padding: 22px 4px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--anthracite);
+    text-align: left;
+    cursor: pointer;
+  }
+  .faq-question:focus-visible { outline: 2px solid var(--terracotta); outline-offset: 2px; }
+  .faq-toggle {
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: 1px solid var(--line);
+    color: var(--terracotta-dark);
+    font-size: 15px;
+    transition: transform 0.2s ease, background 0.2s ease;
+  }
+  .faq-item.open .faq-toggle {
+    transform: rotate(45deg);
+    background: var(--cream-dim);
+  }
+  .faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+  .faq-answer p {
+    padding: 0 4px 22px;
+    color: var(--grey);
+    font-size: 15px;
+    max-width: 620px;
+  }
+  .faq-answer a { color: var(--terracotta-dark); }
+
+  /* ---------- FOOTER ---------- */
+  footer {
+    padding: 40px 0 60px;
+    border-top: 1px solid var(--line);
+  }
+  footer .wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  @media (min-width: 640px) {
+    footer .wrap { flex-direction: row; justify-content: space-between; align-items: flex-end; }
+  }
+  footer .fmark { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 15px; }
+  footer .fnote { font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--grey); max-width: 460px; }
+  .footer-link { color: var(--terracotta-dark); text-decoration: underline; }
+
+  /* ---------- SCROLL REVEAL ---------- */
+  .reveal {
+    opacity: 0;
+    transform: translateY(60px) scale(0.96);
+    filter: blur(1.5px);
+    transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1), transform 0.75s cubic-bezier(0.16, 1, 0.3, 1), filter 0.75s ease;
+    will-change: transform, opacity, filter;
+  }
+  .reveal.revealed {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; scroll-behavior: auto !important; }
+    .reveal { opacity: 1; transform: none; filter: none; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="wordmark">die <span>next</span>werker</div>
+    <a href="#eintragen" class="header-tag mono">Früh dabei sein →</a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <h1>Handwerk bleibt Handwerk.<br><span class="fade">Der Rest wird einfacher.</span></h1>
+    <p class="lede">Wir bringen euren Betrieb technisch auf den nächsten Stand – Angebote, Termine, Rechnungen.<br><span class="trust-accent">Technik im Hintergrund, Mensch im Vordergrund.</span></p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-num mono">01</span>
+      <h2>Der Weg eines Auftrags</h2>
+    </div>
+    <p class="section-intro">Ein Auftrag, von der ersten Anfrage bis zur Rechnung — Schritt für Schritt am Beispiel von Frau Kesslers defekter Gastherme, zum Ausprobieren.</p>
+
+    <div class="journey-stepper">
+      <a href="#station-anfrage" class="stepper-item">Anfrage</a>
+      <span class="stepper-arrow">→</span>
+      <a href="#station-vorort" class="stepper-item">Vor Ort</a>
+      <span class="stepper-arrow">→</span>
+      <a href="#station-angebot" class="stepper-item">Angebot</a>
+      <span class="stepper-arrow">→</span>
+      <a href="#station-rechnung" class="stepper-item">Rechnung</a>
+    </div>
+
+    <div class="journey-station" id="station-anfrage">
+      <div class="tag mono">Anfrage</div>
+      <h3>Ihr sprecht direkt mit dem Kunden</h3>
+      <p class="demo-copy">Nur wenn's gerade nicht passt: Die KI schätzt ein, ob's ein Notfall ist oder warten kann — bei akuten Fällen wird sofort der Bereitschaftsdienst alarmiert, sonst automatisch der nächste passende Termin gebucht.</p>
+
+      <div class="channel-tabs" role="tablist" aria-label="Kanal wählen">
+        <button type="button" class="chip active" data-channel="phone">Telefon</button>
+        <button type="button" class="chip" data-channel="whatsapp">WhatsApp</button>
+        <button type="button" class="chip" data-channel="website">Website</button>
+      </div>
+
+      <div class="channel-view active" id="channel-phone">
+        <div class="demo-panel-inner">
+          <div class="demo-left">
+            <div class="tag mono">Telefon</div>
+            <h3>Leitung besetzt — Voicebot übernimmt</h3>
+            <p class="demo-copy">Ideal für Kundschaft ohne Internet: Wenn niemand rangeht, führt der Voicebot ein echtes Gespräch statt einer Ansage.</p>
+            <button class="demo-btn" data-play="phone">Anruf abspielen</button>
+          </div>
+          <div class="demo-right">
+            <div class="chat-card">
+              <div class="chat-head">
+                <span class="mono">Telefon</span>
+                <span class="busy-indicator mono"><span class="dot"></span>Alle Leitungen besetzt · Voicebot aktiv</span>
+              </div>
+              <div class="chat-body" id="chatBody-phone">
+                <div class="chat-placeholder mono">Klick auf „Anruf abspielen"</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="channel-view" id="channel-whatsapp">
+        <div class="demo-panel-inner">
+          <div class="demo-left">
+            <div class="tag mono">WhatsApp</div>
+            <h3>Foto rein, Dringlichkeit sofort erkannt</h3>
+            <p class="demo-copy">Ein Wasserschaden meldet sich anders als eine kaputte Heizung — die KI erkennt den Unterschied auch am Bild.</p>
+            <button class="demo-btn" data-play="whatsapp">Nachricht abspielen</button>
+          </div>
+          <div class="demo-right">
+            <div class="chat-card">
+              <div class="chat-head">
+                <span class="mono">WhatsApp</span>
+                <span class="busy-indicator mono"><span class="dot"></span>Team im Einsatz · Auto-Antwort aktiv</span>
+              </div>
+              <div class="chat-body" id="chatBody-whatsapp">
+                <div class="chat-placeholder mono">Klick auf „Nachricht abspielen"</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="channel-view" id="channel-website">
+        <div class="demo-panel-inner">
+          <div class="demo-left">
+            <div class="tag mono">Website</div>
+            <h3>Rund um die Uhr direkt buchen</h3>
+            <p class="demo-copy">Ein anderer Kunde, 22 Uhr abends: Kein Anruf nötig, kein Warten auf Öffnungszeiten — der Termin steht sofort.</p>
+            <button class="demo-btn" data-play="website">Chat abspielen</button>
+          </div>
+          <div class="demo-right">
+            <div class="chat-card">
+              <div class="chat-head">
+                <span class="mono">Website-Chat</span>
+                <span class="busy-indicator mono"><span class="dot"></span>22:14 Uhr · außerhalb der Öffnungszeiten</span>
+              </div>
+              <div class="chat-body" id="chatBody-website">
+                <div class="chat-placeholder mono">Klick auf „Chat abspielen"</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="journey-station" id="station-vorort">
+      <div class="tag mono">Vor Ort</div>
+      <h3>Die Diagnose wird zur Bestellung</h3>
+      <p class="demo-copy">Auf der Baustelle bleibt keine Zeit zum Tippen. Deshalb ändert sich an eurem Alltag nichts: kurz reinsprechen oder eine Zeile schreiben, wie ihr's sowieso tun würdet — an eine feste Nummer statt an euch selbst. nextwerk sortiert nicht nur — es verknüpft Diagnose, Bestellung und Kundenverfügbarkeit zu einem konkreten Terminvorschlag.</p>
+
+      <div class="process-card">
+        <div class="process-head">
+          <span class="mono">Wie der Techniker vor Ort dokumentiert</span>
+          <span class="mono status-badge" id="voiceStatus">bereit</span>
+        </div>
+        <div class="voice-player">
+          <button class="play-btn" id="playBtn" aria-label="Sprachnotiz abspielen">▶</button>
+          <div class="waveform-wrap">
+            <div class="waveform-layer base" id="wfBase"></div>
+            <div class="waveform-layer progress" id="wfProgress"></div>
+          </div>
+          <span class="voice-duration mono" id="voiceDuration">0:00 / 0:34</span>
+        </div>
+        <p class="voice-transcript" id="voiceTranscriptText">"kessler, gartenstraße – die vaillant ecotec zeigt f28, zündung geht nicht, tipp auf zündelektrode – dichtung sicherheitshalber gleich mitbestellen, falls die beim ausbau reißt – frau kessler ist mittwochs nie da, sonst ab 14 uhr – wenn die teile in ein zwei tagen kommen, schlag ich ihr freitag nachmittag vor"</p>
+
+        <div class="process-divider" id="processDivider">
+          <span>wird sortiert</span><span class="dot-flow"><i></i><i></i><i></i></span>
+        </div>
+
+        <div class="sorted-rows-grid" id="sortedRows">
+          <div class="sorted-row"><span class="tag-chip">Kunde</span><span class="v">Kessler, Gartenstraße</span></div>
+          <div class="sorted-row"><span class="tag-chip">Gerät</span><span class="v">Vaillant ecoTEC · F.28</span></div>
+          <div class="sorted-row"><span class="tag-chip">Diagnose</span><span class="v">Zündelektrode (Verdacht)</span></div>
+          <div class="sorted-row"><span class="tag-chip">Bestellung</span><span class="v">Zündelektrode + Dichtung</span></div>
+          <div class="sorted-row"><span class="tag-chip">Verfügbar</span><span class="v">Nicht Mi. · sonst ab 14 Uhr</span></div>
+          <div class="sorted-row"><span class="tag-chip">Vorschlag</span><span class="v">Fr. nachm. · nach Lieferung</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="journey-station" id="station-angebot">
+      <div class="demo-panel-inner">
+        <div class="demo-left">
+          <div class="tag mono">Angebot</div>
+          <h3>Was schon bestellt ist, wird zum Angebot</h3>
+          <p class="demo-copy">Der Techniker war bei Frau Kessler vor Ort, hat die defekte Gastherme diagnostiziert und in seiner Sprachnotiz (siehe "Vor Ort" oben) Zündelektrode und Dichtung bestellt. Diese Bestellung reicht der KI bereits — daraus wird jetzt automatisch ein fertiges Angebot.</p>
+          <div class="field-label mono">Zugrunde liegende Bestellung</div>
+          <textarea id="angebotInput" class="demo-textarea" rows="4" placeholder="z.B. Zündelektrode + Dichtung, Vaillant ecoTEC, ca. 1,5 Std.">Zündelektrode + Dichtung, Vaillant ecoTEC, ca. 1,5 Std. Arbeitszeit</textarea>
+          <button class="demo-btn" id="angebotBtn">Angebot erstellen</button>
+        </div>
+        <div class="demo-right">
+          <div class="doc-card" id="angebotResult">
+            <div class="doc-head">
+              <span class="mono">ANGEBOT · KESSLER</span>
+              <span class="mono status-badge" id="angebotStatus">noch nicht erstellt</span>
+            </div>
+            <div class="doc-placeholder mono" id="docPlaceholder">Noch kein Angebot erstellt — klick auf „Angebot erstellen"</div>
+            <div class="doc-lines" id="docLines">
+              <div class="doc-line"><span>Zündelektrode, Vaillant<span class="price-note mono" id="docPriceNote"></span></span><span id="docZuend">—</span></div>
+              <div class="doc-line"><span>Dichtungssatz</span><span id="docDicht">—</span></div>
+              <div class="doc-line"><span>Arbeitszeit, 1,5 Std.</span><span id="docArbeit">—</span></div>
+              <div class="doc-line"><span>Anfahrt</span><span id="docAnfahrt">—</span></div>
+              <div class="doc-line total"><span>Gesamt (zzgl. MwSt.)</span><span id="docGesamt">—</span></div>
+              <div class="doc-foot mono" id="docFoot"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="journey-station" id="station-rechnung">
+      <div class="demo-panel-inner">
+        <div class="demo-left">
+          <div class="tag mono">Rechnung</div>
+          <h3>Aus dem Beleg wird die fertige Rechnung</h3>
+          <p class="demo-copy">Der Großhändler-Beleg für die bestellte Zündelektrode und Dichtung trudelt per Foto oder E-Mail ein. Die KI ordnet ihn automatisch Kesslers Auftrag zu, vergleicht ihn mit dem Angebot von eben — und stellt direkt die fertige Rechnung an die Kundin.</p>
+          <button class="demo-btn" id="belegBtn">Beleg einlesen</button>
+        </div>
+        <div class="demo-right">
+          <div class="invoice-stack">
+            <div class="incoming-beleg" id="incomingBeleg">
+              <div class="scan-bar"></div>
+              <span class="mono">📄 beleg_grosshandel.pdf</span>
+              <span class="mono" id="incomingAmount">—</span>
+            </div>
+            <div class="doc-card invoice-card" id="invoiceCard">
+              <div class="doc-head">
+                <span class="mono">RECHNUNG · RE-2026-0148</span>
+                <span class="mono status-badge" id="invoiceStatus">noch nicht erstellt</span>
+              </div>
+              <div class="invoice-meta mono" id="invoiceMeta"></div>
+              <div class="doc-line"><span>Zündelektrode, Vaillant</span><span id="invZuend">—</span></div>
+              <div class="doc-line"><span>Dichtungssatz</span><span id="invDicht">—</span></div>
+              <div class="doc-line"><span>Arbeitszeit, 1,5 Std. à 85 €</span><span id="invArbeit">—</span></div>
+              <div class="doc-line"><span>Anfahrt</span><span id="invAnfahrt">—</span></div>
+              <div class="doc-line"><span>Zwischensumme</span><span id="invZwischen">—</span></div>
+              <div class="doc-line"><span>zzgl. 19% MwSt.</span><span id="invMwst">—</span></div>
+              <div class="doc-line total"><span>Gesamtbetrag</span><span id="invGesamt">—</span></div>
+              <div class="doc-foot mono" id="invFoot"></div>
+              <div class="scan-status mono" id="scanStatus"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="padding-top: 0;">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-num mono">02</span>
+      <h2>Eine Akte statt fünf Tools</h2>
+    </div>
+    <p class="section-intro">Was mit Kesslers Anfrage beginnt und sich bis zur Wartungserinnerung durchzieht — alles bleibt in einer einzigen, mitwachsenden Auftragsakte statt über WhatsApp, Zettel und Excel verstreut.</p>
+
+    <div class="akte-compare">
+      <div class="akte-before">
+        <div class="akte-before-label mono">Ohne verbundenes System</div>
+        <div class="scatter-item">WhatsApp-Verlauf mit der Kundin</div>
+        <div class="scatter-item">Notizzettel vom Kundenbesuch</div>
+        <div class="scatter-item">Excel-Liste für Bestellungen</div>
+        <div class="scatter-item">Separates Rechnungsprogramm</div>
+        <div class="scatter-item">Kalender-App fürs Team</div>
+      </div>
+      <div class="akte-arrow mono">→</div>
+      <div class="akte-after">
+        <div class="akte-after-label mono">Auftragsakte · Kessler, Gartenstraße</div>
+        <div class="akte-timeline">
+          <div class="akte-step"><span class="check">✓</span><span class="step-label">Anfrage</span><span class="step-detail">Di. 08:12 · Telefon</span></div>
+          <div class="akte-step"><span class="check">✓</span><span class="step-label">Diagnose + Bestellung</span><span class="step-detail">Vor Ort · Zündelektrode, Dichtung</span></div>
+          <div class="akte-step"><span class="check">✓</span><span class="step-label">Termin bestätigt</span><span class="step-detail">Do. 09:00</span></div>
+          <div class="akte-step"><span class="check">✓</span><span class="step-label">Angebot</span><span class="step-detail">244,50 € · versendet</span></div>
+          <div class="akte-step"><span class="check">✓</span><span class="step-label">Rechnung</span><span class="step-detail">290,96 € · gestellt</span></div>
+          <div class="akte-step pending"><span class="check">○</span><span class="step-label">Wartung</span><span class="step-detail">Erinnerung Juli 2027</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="padding-top: 0;">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-num mono">03</span>
+      <h2>So läuft's ab</h2>
+    </div>
+    <div class="process-list">
+      <div class="process-row">
+        <div class="step-num mono">●</div>
+        <div>
+          <h3>Kurzes Gespräch</h3>
+          <p>Wir schauen uns euren Alltag an — wo geht am meisten Zeit für Verwaltung drauf?</p>
+        </div>
+      </div>
+      <div class="process-row">
+        <div class="step-num mono">●</div>
+        <div>
+          <h3>Klarer Vorschlag</h3>
+          <p>Ihr bekommt konkrete Ansatzpunkte, keine Buzzword-Folie — inklusive möglicher Förderung.</p>
+        </div>
+      </div>
+      <div class="process-row">
+        <div class="step-num mono">●</div>
+        <div>
+          <h3>Umsetzung</h3>
+          <p>Wir bauen und richten ein, was wirklich gebraucht wird — Schritt für Schritt, nicht auf einmal.</p>
+        </div>
+      </div>
+      <div class="process-row">
+        <div class="step-num mono">●</div>
+        <div>
+          <h3>Begleitung</h3>
+          <p>Auch danach seid ihr nicht allein — bei Fragen oder wenn sich was ändert, sind wir erreichbar.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="padding-top: 0;">
+  <div class="wrap">
+    <div class="about">
+      <div class="eyebrow2 mono">Warum die nextwerker?</div>
+      <h2>Kein Tech-Startup.<br>Wir sprechen beide Sprachen.</h2>
+      <p>Kein Buzzword-Bingo.<br>Keine Software, die am Ende doch keiner im Betrieb nutzt.<br>Nur das, was euren Alltag wirklich leichter macht.</p>
+      <p>Unser Ziel ist nicht, euren Betrieb zu digitalisieren, weil's grad Trend ist.<br>Unser Ziel ist, dass ihr abends früher Feierabend habt.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="padding-top: 0;">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Häufige Fragen</h2>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-question" type="button" aria-expanded="false">
+          <span>Was kostet das?</span>
+          <span class="faq-toggle">+</span>
+        </button>
+        <div class="faq-answer">
+          <p>Kommt aufs Projekt an — aber ein Teil der Beratung ist oft förderfähig: Über die Intensivberatung des Landes liegt euer Eigenanteil bei nur 400 € pro Beratungstag, den Rest übernimmt die Förderung.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" type="button" aria-expanded="false">
+          <span>Ersetzt das unser Team?</span>
+          <span class="faq-toggle">+</span>
+        </button>
+        <div class="faq-answer">
+          <p>Nein. Beim Kundenkontakt springt die KI nur ein, wenn gerade niemand rangehen kann — den Rest der Zeit sprecht ihr wie gewohnt direkt mit euren Kunden. Bei Angeboten und Rechnungen arbeitet sie im Hintergrund mit, damit die weniger Zeit fressen — ihr entscheidet immer, wo sie einspringt und wo nicht.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" type="button" aria-expanded="false">
+          <span>Wie lange dauert die Umsetzung?</span>
+          <span class="faq-toggle">+</span>
+        </button>
+        <div class="faq-answer">
+          <p>Kommt auf den Umfang an. Meistens starten wir mit einem einzelnen Baustein — z.B. nur den Anfragen — statt gleich alles auf einmal umzukrempeln.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" type="button" aria-expanded="false">
+          <span>Was passiert mit unseren Kundendaten?</span>
+          <span class="faq-toggle">+</span>
+        </button>
+        <div class="faq-answer">
+          <p>Eure Kundendaten bleiben in eurem System und werden nicht an Dritte verkauft. Mehr dazu in den <a href="#datenschutz-note">Datenschutzhinweisen</a> unten.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" type="button" aria-expanded="false">
+          <span>Brauchen wir neue Hardware oder Schulungen?</span>
+          <span class="faq-toggle">+</span>
+        </button>
+        <div class="faq-answer">
+          <p>In der Regel nicht — die Tools laufen über das, was ihr eh schon nutzt: Telefon, WhatsApp, eure Website.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="eintragen" style="padding-top: 0;">
+  <div class="wrap">
+    <div class="capture">
+      <h2>Noch im Aufbau —<br>aber schon bald startklar</h2>
+      <p>Trag dich ein und sichere dir eines der ersten kostenlosen Erstgespräche, sobald es losgeht.<br>Kein Newsletter-Spam, nur ein kurzes Update.</p>
+      <form class="capture-form" id="captureForm">
+        <input type="email" id="emailInput" placeholder="deine@email.de" required aria-label="E-Mail-Adresse">
+        <button type="submit">Eintragen</button>
+      </form>
+      <label class="consent-label">
+        <input type="checkbox" id="consentCheck">
+        Ich bin einverstanden, dass meine E-Mail-Adresse nur genutzt wird, um mich zu informieren, sobald es losgeht.
+      </label>
+      <div class="success-msg mono" id="successMsg">Danke — du bist auf der Liste. Wir melden uns, sobald es losgeht.</div>
+      <div class="capture-note">Kein Angebot, kein Vertrag — nur Infos, sobald es startet.</div>
+      <div class="datenschutz-note" id="datenschutz-note">Deine E-Mail-Adresse wird ausschließlich verwendet, um dich zu informieren, sobald "die nextwerker" startet. Kein Verkauf oder Weitergabe an Dritte, keine sonstige Nutzung. Du kannst dich jederzeit formlos wieder austragen.</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="fmark">die nextwerker</div>
+    <div class="fnote">Projekt im Aufbau. Diese Seite dient der Vorstellung eines geplanten Beratungsangebots für Handwerksbetriebe im Raum Stuttgart. Kontakt: [E-Mail folgt] · Kein Angebot im rechtlichen Sinne · <a href="#datenschutz-note" class="footer-link">Datenschutz</a></div>
+  </div>
+</footer>
+
+<script>
+  // --- Hero: Sprachnotiz-Player mit Waveform + gestaffelter Sortierung ---
+  const wfBase = document.getElementById('wfBase');
+  const wfProgress = document.getElementById('wfProgress');
+  const barHeights = [32,55,40,70,45,85,38,60,50,78,42,65,30,90,52,45,72,35,62,80,40,58,68,46,76,50,36,62,44,58];
+  function buildWaveform(container) {
+    container.innerHTML = '';
+    barHeights.forEach(h => {
+      const bar = document.createElement('div');
+      bar.className = 'bar';
+      bar.style.height = h + '%';
+      container.appendChild(bar);
+    });
+  }
+  buildWaveform(wfBase);
+  buildWaveform(wfProgress);
+
+  const playBtn = document.getElementById('playBtn');
+  const voiceStatus = document.getElementById('voiceStatus');
+  const voiceDuration = document.getElementById('voiceDuration');
+  const voiceTranscriptText = document.getElementById('voiceTranscriptText');
+  const processDivider = document.getElementById('processDivider');
+  const sortedRowEls = document.querySelectorAll('#sortedRows .sorted-row');
+
+  playBtn.addEventListener('click', async () => {
+    playBtn.disabled = true;
+    playBtn.textContent = '❚❚';
+    voiceStatus.textContent = 'wird abgespielt';
+    voiceTranscriptText.classList.remove('show');
+    processDivider.classList.remove('show');
+    sortedRowEls.forEach(r => r.classList.remove('show'));
+    wfProgress.style.clipPath = 'inset(0 100% 0 0)';
+    voiceDuration.textContent = '0:00 / 0:34';
+
+    await wait(30);
+    wfProgress.style.clipPath = 'inset(0 0% 0 0)';
+    voiceDuration.textContent = '0:34 / 0:34';
+
+    await wait(2200);
+    playBtn.textContent = '▶';
+    voiceTranscriptText.classList.add('show');
+    voiceStatus.textContent = 'wird sortiert';
+
+    await wait(500);
+    processDivider.classList.add('show');
+
+    await wait(700);
+    for (let i = 0; i < sortedRowEls.length; i++) {
+      sortedRowEls[i].classList.add('show');
+      await wait(140);
+    }
+    voiceStatus.textContent = 'sortiert';
+    playBtn.disabled = false;
+  });
+
+  // --- Demo: Anfrage über 3 Kanäle ---
+  const channelTabs = document.querySelectorAll('.channel-tabs .chip');
+  const channelViews = document.querySelectorAll('.channel-view');
+  channelTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      channelTabs.forEach(t => t.classList.remove('active'));
+      channelViews.forEach(v => v.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById('channel-' + tab.dataset.channel).classList.add('active');
+    });
+  });
+
+  function wait(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+  function animateCount(el, target, duration = 650) {
+    const start = performance.now();
+    function frame(now) {
+      const progress = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      const value = target * eased;
+      el.textContent = value.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+      if (progress < 1) {
+        requestAnimationFrame(frame);
+      } else {
+        el.textContent = target.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+      }
+    }
+    requestAnimationFrame(frame);
+  }
+
+  function addBubbleTo(bodyEl, text, cls) {
+    const b = document.createElement('div');
+    b.className = 'bubble ' + cls;
+    b.textContent = text;
+    bodyEl.appendChild(b);
+    bodyEl.scrollTop = bodyEl.scrollHeight;
+    return b;
+  }
+  function addImageBubbleTo(bodyEl) {
+    const b = document.createElement('div');
+    b.className = 'bubble user image-bubble';
+    b.innerHTML = `
+      <div class="image-thumb">
+        <svg viewBox="0 0 64 48" width="100%" xmlns="http://www.w3.org/2000/svg">
+          <rect x="0" y="0" width="64" height="48" rx="4" fill="#F3EEE4"/>
+          <line x1="14" y1="8" x2="14" y2="24" stroke="#2B2925" stroke-width="2.5" stroke-linecap="round"/>
+          <circle cx="14" cy="29" r="2.4" fill="#B8562E"/>
+          <path d="M6 44 Q 20 38 34 44 Q 48 50 58 42" stroke="#B8562E" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.7"/>
+          <ellipse cx="26" cy="43" rx="16" ry="3.2" fill="#B8562E" opacity="0.25"/>
+        </svg>
+      </div>
+      <div class="image-caption">📷 IMG_0392.jpg</div>
+    `;
+    bodyEl.appendChild(b);
+    bodyEl.scrollTop = bodyEl.scrollHeight;
+    return b;
+  }
+
+  const channelScripts = {
+    phone: [
+      { cls: 'system', text: '📞 Eingehender Anruf — alle Leitungen besetzt. Voicebot übernimmt.' },
+      { cls: 'bot', text: 'Kurzer Hinweis: Gerade ist das ganze Team im Einsatz — deshalb übernimmt hier unser KI-Assistent.' },
+      { cls: 'bot', text: 'Aber ich kann schon mal helfen: Worum geht\'s?' },
+      { cls: 'user', text: '🎙 „Grüß Gott, hier ist Kessler, unsere Heizung geht seit heute gar nicht mehr, hätten Sie mal Zeit vorbeizuschauen?"' },
+      { cls: 'urgency', level: 'low' },
+      { cls: 'bot', text: 'Klingt nach einem Ausfall, kein Wasserschaden — kein Notfall. Nächster freier Termin mit Gas-Berechtigung: Do. 09:00. Soll ich den eintragen?' },
+      { cls: 'user', text: '🎙 „Ja, passt."' },
+      { cls: 'bot', text: 'Ist eingetragen — Sie bekommen gleich eine Bestätigung per SMS.' }
+    ],
+    whatsapp: [
+      { cls: 'image' },
+      { cls: 'user', text: 'Bei uns läuft Wasser unterm Heizkessel raus, überall nass!' },
+      { cls: 'urgency', level: 'high' },
+      { cls: 'bot', text: 'Kurzer Hinweis: Gerade ist das ganze Team im Einsatz — deshalb antwortet hier unser KI-Assistent.' },
+      { cls: 'bot', text: '🚨 Als Notfall eingestuft — Bereitschaftsdienst wurde informiert und meldet sich in Kürze.' }
+    ],
+    website: [
+      { cls: 'bot', text: 'Kurzer Hinweis: Sie chatten gerade mit unserem KI-Assistenten — unser Team ist außerhalb der Öffnungszeiten nicht erreichbar.' },
+      { cls: 'bot', text: 'Guten Abend! Was kann ich für Sie tun?' },
+      { cls: 'user', text: 'Ich bräuchte die jährliche Wartung für unsere Heizung, am liebsten nächste Woche.' },
+      { cls: 'bot', text: 'Nächster freier Termin: Di. 10:00 oder Do. 15:30 — beide mit Wartungsberechtigung. Welcher passt?' },
+      { cls: 'user', text: 'Donnerstag 15:30 bitte.' },
+      { cls: 'bot', text: 'Gebucht! Bestätigung kommt per E-Mail, Erinnerung folgt automatisch vor dem Termin.' }
+    ]
+  };
+
+  function addUrgencyMeterTo(bodyEl, level) {
+    const wrap = document.createElement('div');
+    wrap.className = 'urgency-meter';
+    wrap.innerHTML = `
+      <div class="um-label">Dringlichkeit wird eingeschätzt …</div>
+      <div class="bar-track"><div class="bar-fill"></div></div>
+    `;
+    bodyEl.appendChild(wrap);
+    bodyEl.scrollTop = bodyEl.scrollHeight;
+    return wrap;
+  }
+
+  async function playScript(channel, btn) {
+    const bodyEl = document.getElementById('chatBody-' + channel);
+    bodyEl.innerHTML = '';
+    btn.disabled = true;
+    const originalLabel = btn.textContent;
+    btn.textContent = 'Läuft...';
+    for (const step of channelScripts[channel]) {
+      if (step.cls === 'image') {
+        addImageBubbleTo(bodyEl);
+      } else if (step.cls === 'urgency') {
+        const meter = addUrgencyMeterTo(bodyEl, step.level);
+        const fill = meter.querySelector('.bar-fill');
+        const label = meter.querySelector('.um-label');
+        await wait(30);
+        if (step.level === 'high') {
+          fill.style.width = '92%';
+          fill.classList.add('high');
+        } else {
+          fill.style.width = '22%';
+          fill.classList.add('low');
+        }
+        await wait(750);
+        label.textContent = step.level === 'high' ? 'Hohe Dringlichkeit erkannt' : 'Keine akute Dringlichkeit';
+        await wait(400);
+      } else if (step.cls === 'bot') {
+        const indicatorLabel = channel === 'phone' ? '🔊 spricht …' : 'tippt …';
+        const typing = addBubbleTo(bodyEl, indicatorLabel, 'typing');
+        await wait(650);
+        typing.remove();
+        addBubbleTo(bodyEl, step.text, 'bot');
+      } else {
+        addBubbleTo(bodyEl, step.text, step.cls);
+      }
+      await wait(450);
+    }
+    btn.disabled = false;
+    btn.textContent = 'Nochmal abspielen';
+  }
+
+  document.querySelectorAll('[data-play]').forEach(btn => {
+    btn.addEventListener('click', () => playScript(btn.dataset.play, btn));
+  });
+
+  // --- Demo: Angebot ---
+  const angebotBtn = document.getElementById('angebotBtn');
+  const angebotStatus = document.getElementById('angebotStatus');
+  const docPlaceholder = document.getElementById('docPlaceholder');
+  const docLines = document.getElementById('docLines');
+  const docZuend = document.getElementById('docZuend');
+  const docPriceNote = document.getElementById('docPriceNote');
+  const docDicht = document.getElementById('docDicht');
+  const docArbeit = document.getElementById('docArbeit');
+  const docAnfahrt = document.getElementById('docAnfahrt');
+  const docGesamt = document.getElementById('docGesamt');
+  const docFoot = document.getElementById('docFoot');
+
+  angebotBtn.addEventListener('click', () => {
+    angebotBtn.disabled = true;
+    angebotBtn.textContent = 'Erstelle Angebot...';
+    angebotStatus.textContent = 'wird erstellt';
+    angebotStatus.classList.remove('ready');
+    docLines.classList.remove('visible');
+    docPlaceholder.style.display = 'block';
+    docPlaceholder.textContent = 'Angebot wird erstellt...';
+    [docZuend, docDicht, docArbeit, docAnfahrt, docGesamt].forEach(f => f.textContent = '—');
+    docPriceNote.textContent = '';
+    docFoot.textContent = '';
+    setTimeout(() => {
+      animateCount(docZuend, 68.00);
+      docPriceNote.textContent = '↑12% seit letzter Bestellung';
+      animateCount(docDicht, 14.00);
+      animateCount(docArbeit, 127.50);
+      animateCount(docAnfahrt, 35.00);
+      animateCount(docGesamt, 244.50, 900);
+      docFoot.textContent = 'Preise live vom Großhändler übernommen · Auftrag: Kessler';
+      angebotStatus.textContent = 'bereit';
+      angebotStatus.classList.add('ready');
+      docPlaceholder.style.display = 'none';
+      docLines.classList.add('visible');
+      angebotBtn.disabled = false;
+      angebotBtn.textContent = 'Neues Angebot erstellen';
+    }, 900);
+  });
+
+  // --- Demo: Rechnung aus Beleg (mit Margen-Check) ---
+  const belegBtn = document.getElementById('belegBtn');
+  const incomingBeleg = document.getElementById('incomingBeleg');
+  const incomingAmount = document.getElementById('incomingAmount');
+  const invoiceStatus = document.getElementById('invoiceStatus');
+  const invoiceMeta = document.getElementById('invoiceMeta');
+  const invZuend = document.getElementById('invZuend');
+  const invDicht = document.getElementById('invDicht');
+  const invArbeit = document.getElementById('invArbeit');
+  const invAnfahrt = document.getElementById('invAnfahrt');
+  const invZwischen = document.getElementById('invZwischen');
+  const invMwst = document.getElementById('invMwst');
+  const invGesamt = document.getElementById('invGesamt');
+  const invFoot = document.getElementById('invFoot');
+  const scanStatus = document.getElementById('scanStatus');
+
+  belegBtn.addEventListener('click', async () => {
+    belegBtn.disabled = true;
+    belegBtn.textContent = 'Lese Beleg ein...';
+    incomingAmount.textContent = '—';
+    invoiceStatus.textContent = 'noch nicht erstellt';
+    invoiceStatus.classList.remove('ready');
+    invoiceMeta.textContent = '';
+    [invZuend, invDicht, invArbeit, invAnfahrt, invZwischen, invMwst, invGesamt].forEach(f => f.textContent = '—');
+    invFoot.textContent = '';
+    scanStatus.textContent = '';
+    scanStatus.classList.remove('show');
+
+    incomingBeleg.classList.add('scanning');
+    await wait(900);
+    incomingBeleg.classList.remove('scanning');
+    animateCount(incomingAmount, 88.50);
+
+    await wait(650);
+    belegBtn.textContent = 'Erstelle Rechnung...';
+    invoiceStatus.textContent = 'wird erstellt';
+    await wait(800);
+
+    invoiceMeta.innerHTML = 'Kundin: Kessler, Gartenstraße 14, 70565 Stuttgart<br>Datum: 29.07.2026 · Leistung: Reparatur Gastherme';
+    animateCount(invZuend, 68.00);
+    animateCount(invDicht, 14.00);
+    animateCount(invArbeit, 127.50);
+    animateCount(invAnfahrt, 35.00);
+    animateCount(invZwischen, 244.50);
+    animateCount(invMwst, 46.46);
+    animateCount(invGesamt, 290.96, 900);
+    invFoot.textContent = 'Zahlungsziel: 14 Tage · Preis wie im Angebot zugesagt, unverändert für die Kundin';
+    invoiceStatus.textContent = 'bereit';
+    invoiceStatus.classList.add('ready');
+
+    await wait(700);
+    scanStatus.textContent = 'Marge-Check: Materialkosten laut Beleg 88,50 € statt kalkulierter 82,00 € (+8%) — Kundin zahlt trotzdem den zugesagten Preis. Wartungserinnerung in 12 Monaten eingeplant.';
+    scanStatus.classList.add('show');
+
+    belegBtn.disabled = false;
+    belegBtn.textContent = 'Nächsten Beleg einlesen';
+  });
+
+  const form = document.getElementById('captureForm');
+  const successMsg = document.getElementById('successMsg');
+  const consentCheck = document.getElementById('consentCheck');
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    if (!consentCheck.checked) {
+      consentCheck.focus();
+      consentCheck.parentElement.style.color = 'var(--terracotta-dark)';
+      return;
+    }
+    form.style.display = 'none';
+    document.querySelector('.consent-label').style.display = 'none';
+    successMsg.classList.add('show');
+  });
+
+  // --- FAQ accordion ---
+  document.querySelectorAll('.faq-question').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const item = btn.closest('.faq-item');
+      const answer = item.querySelector('.faq-answer');
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item.open').forEach(openItem => {
+        if (openItem !== item) {
+          openItem.classList.remove('open');
+          openItem.querySelector('.faq-question').setAttribute('aria-expanded', 'false');
+          openItem.querySelector('.faq-answer').style.maxHeight = null;
+        }
+      });
+      if (isOpen) {
+        item.classList.remove('open');
+        btn.setAttribute('aria-expanded', 'false');
+        answer.style.maxHeight = null;
+      } else {
+        item.classList.add('open');
+        btn.setAttribute('aria-expanded', 'true');
+        answer.style.maxHeight = answer.scrollHeight + 'px';
+      }
+    });
+  });
+
+  // --- Sticky header scroll state ---
+  const siteHeader = document.querySelector('header');
+  window.addEventListener('scroll', () => {
+    siteHeader.classList.toggle('scrolled', window.scrollY > 8);
+  }, { passive: true });
+
+  // --- Scroll reveal (bidirectional) ---
+  const revealTargets = document.querySelectorAll(
+    '.journey-stepper, .journey-station, .akte-compare, .process-row, .about, .capture'
+  );
+  revealTargets.forEach(el => el.classList.add('reveal'));
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      entry.target.classList.toggle('revealed', entry.isIntersecting);
+    });
+  }, { threshold: 0.15, rootMargin: '0px 0px -80px 0px' });
+  revealTargets.forEach(el => revealObserver.observe(el));
+</script>
+
+</body>
+</html>
