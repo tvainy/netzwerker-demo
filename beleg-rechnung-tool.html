@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Beleg → Rechnung · Nextwerker</title>
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5.0.4/dist/tesseract.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #f4f2ec;
+    --panel: #ffffff;
+    --ink: #1e2320;
+    --ink-soft: #5c6259;
+    --line: #d8d4c8;
+    --copper: #a1592f;
+    --copper-dark: #7c4224;
+    --ok: #3f6b4a;
+    --warn: #a13f2f;
+    --mono: 'JetBrains Mono', 'SF Mono', Consolas, monospace;
+    --sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: var(--sans);
+    background: var(--bg);
+    background-image:
+      linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size: 32px 32px;
+    background-attachment: fixed;
+    color: var(--ink);
+    padding: 24px 16px 80px;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; }
+  header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    padding-bottom: 20px;
+    margin-bottom: 24px;
+    border-bottom: 3px solid var(--ink);
+  }
+  header h1 {
+    font-size: 22px;
+    letter-spacing: -0.01em;
+    margin: 0;
+  }
+  header h1 span { color: var(--copper); }
+  header .tag {
+    font-family: var(--mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink-soft);
+  }
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 20px 22px;
+    margin-bottom: 18px;
+    position: relative;
+  }
+  .card::before {
+    content: attr(data-step);
+    position: absolute;
+    top: -12px;
+    left: 18px;
+    background: var(--ink);
+    color: var(--bg);
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 3px;
+    letter-spacing: 0.05em;
+  }
+  .card h2 {
+    font-size: 15px;
+    margin: 6px 0 16px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--ink);
+  }
+  label {
+    display: block;
+    font-size: 11px;
+    font-family: var(--mono);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--ink-soft);
+    margin-bottom: 4px;
+  }
+  input[type=text], input[type=number] {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    font-family: var(--sans);
+    font-size: 14px;
+    background: #fdfcf9;
+    color: var(--ink);
+  }
+  input:focus { outline: 2px solid var(--copper); outline-offset: 1px; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .field { margin-bottom: 12px; }
+  table { width: 100%; border-collapse: collapse; margin-bottom: 10px; }
+  th {
+    text-align: left;
+    font-family: var(--mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--ink-soft);
+    padding: 6px 6px;
+    border-bottom: 1px solid var(--line);
+  }
+  td { padding: 5px 6px; border-bottom: 1px solid #ece9df; }
+  td input { padding: 6px 8px; font-size: 13px; }
+  td.num { width: 90px; }
+  td.del { width: 34px; text-align: center; }
+  .del-btn {
+    background: none; border: none; color: var(--warn); cursor: pointer;
+    font-size: 16px; line-height: 1; padding: 4px;
+  }
+  .addrow {
+    font-family: var(--mono); font-size: 12px; background: none;
+    border: 1px dashed var(--line); color: var(--ink-soft);
+    padding: 6px 12px; border-radius: 3px; cursor: pointer; margin-top: 4px;
+  }
+  .addrow:hover { border-color: var(--copper); color: var(--copper); }
+  .drop {
+    border: 2px dashed var(--line);
+    border-radius: 4px;
+    padding: 28px 16px;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color .15s, background .15s;
+  }
+  .drop:hover, .drop.drag { border-color: var(--copper); background: #fdf6f0; }
+  .drop input { display: none; }
+  .drop-label { font-family: var(--mono); font-size: 12px; color: var(--ink-soft); }
+  .drop-label strong { color: var(--copper); }
+  #previewImg { max-width: 100%; max-height: 180px; border-radius: 3px; margin-top: 12px; display: none; }
+  .ocr-status {
+    font-family: var(--mono); font-size: 12px; color: var(--ink-soft);
+    margin-top: 10px; display: none;
+  }
+  .progress-bar {
+    height: 4px; background: var(--line); border-radius: 2px; overflow: hidden; margin-top: 6px;
+  }
+  .progress-fill { height: 100%; width: 0%; background: var(--copper); transition: width .2s; }
+  .ocr-result {
+    margin-top: 14px; display: none;
+    background: #fbfaf6; border: 1px solid var(--line); border-radius: 3px; padding: 12px 14px;
+  }
+  .ocr-result .found {
+    font-family: var(--mono); font-size: 20px; color: var(--copper-dark); font-weight: 600;
+  }
+  .ocr-result .rawtext {
+    margin-top: 8px; font-family: var(--mono); font-size: 10px; color: var(--ink-soft);
+    max-height: 90px; overflow-y: auto; white-space: pre-wrap; line-height: 1.4;
+  }
+  .margin-check {
+    margin-top: 16px; padding: 14px; border-radius: 3px; border: 1px solid var(--line); display: none;
+  }
+  .margin-check.pos { border-color: var(--warn); background: #fbf1ee; }
+  .margin-check.neu { border-color: var(--ok); background: #eef4ef; }
+  .margin-check .mc-title { font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: .05em; margin-bottom: 6px; color: var(--ink-soft); }
+  .margin-check .mc-value { font-size: 15px; font-weight: 600; }
+  .mc-value.warn { color: var(--warn); }
+  .mc-value.ok { color: var(--ok); }
+  .summary {
+    display: flex; justify-content: flex-end; margin-top: 12px;
+  }
+  .summary table { width: 260px; }
+  .summary td { border: none; padding: 4px 0; }
+  .summary td.label { color: var(--ink-soft); font-family: var(--mono); font-size: 12px; }
+  .summary td.val { text-align: right; font-family: var(--mono); font-size: 13px; }
+  .summary tr.total td { border-top: 2px solid var(--ink); padding-top: 8px; font-weight: 700; font-size: 15px; }
+  .btn-primary {
+    width: 100%; padding: 14px; margin-top: 8px;
+    background: var(--ink); color: #fff; border: none; border-radius: 4px;
+    font-family: var(--sans); font-weight: 600; font-size: 14px; letter-spacing: 0.01em;
+    cursor: pointer; transition: background .15s;
+  }
+  .btn-primary:hover { background: var(--copper-dark); }
+  .btn-primary:disabled { background: var(--line); color: var(--ink-soft); cursor: not-allowed; }
+  .note {
+    font-family: var(--mono); font-size: 11px; color: var(--ink-soft); margin-top: 10px; line-height: 1.5;
+  }
+  footer {
+    text-align: center; font-family: var(--mono); font-size: 11px; color: var(--ink-soft); margin-top: 30px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1>Beleg <span>→</span> Rechnung</h1>
+      <div class="tag">Nextwerker · Prototyp</div>
+    </div>
+  </header>
+
+  <div class="card" data-step="1 · Auftrag">
+    <h2>Kunden- &amp; Auftragsdaten</h2>
+    <div class="grid2">
+      <div class="field">
+        <label>Kundin / Kunde</label>
+        <input type="text" id="custName" placeholder="z. B. Kessler">
+      </div>
+      <div class="field">
+        <label>Adresse</label>
+        <input type="text" id="custAddr" placeholder="Gartenstraße 14, 70565 Stuttgart">
+      </div>
+    </div>
+    <div class="field">
+      <label>Leistungsbeschreibung</label>
+      <input type="text" id="custWork" placeholder="Reparatur Gastherme">
+    </div>
+  </div>
+
+  <div class="card" data-step="2 · Kalkulation">
+    <h2>Kalkulierte Positionen (Angebot)</h2>
+    <table id="posTable">
+      <thead>
+        <tr><th>Bezeichnung</th><th>Menge</th><th>Einzelpreis €</th><th></th></tr>
+      </thead>
+      <tbody id="posBody"></tbody>
+    </table>
+    <button class="addrow" id="addRowBtn" type="button">+ Position hinzufügen</button>
+
+    <div class="summary">
+      <table>
+        <tr><td class="label">Zwischensumme</td><td class="val" id="sumZwischen">0,00 €</td></tr>
+        <tr><td class="label">MwSt. (19%)</td><td class="val" id="sumMwst">0,00 €</td></tr>
+        <tr class="total"><td class="label">Gesamt</td><td class="val" id="sumGesamt">0,00 €</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card" data-step="3 · Beleg">
+    <h2>Beleg einlesen (Materialkosten-Check)</h2>
+    <label class="drop" id="dropZone">
+      <input type="file" id="fileInput" accept="image/*">
+      <div class="drop-label"><strong>Foto/Scan hochladen</strong><br>oder hierher ziehen — Beleg wird direkt im Browser per OCR gelesen</div>
+    </label>
+    <img id="previewImg" alt="Beleg-Vorschau">
+    <div class="ocr-status" id="ocrStatus">
+      <span id="ocrStatusText">Lese Beleg…</span>
+      <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    </div>
+    <div class="ocr-result" id="ocrResult">
+      <div>Erkannter Betrag: <span class="found" id="ocrFound">—</span></div>
+      <div class="rawtext" id="ocrRaw"></div>
+    </div>
+    <div class="margin-check" id="marginCheck">
+      <div class="mc-title">Margen-Check: kalkulierte Material-Position(en) vs. Beleg</div>
+      <div class="mc-value" id="marginValue">—</div>
+    </div>
+    <div class="note">OCR läuft vollständig lokal im Browser (Tesseract.js) — der Beleg verlässt das Gerät nicht. Der erkannte Betrag wird nur zum Vergleich genutzt, nicht automatisch in die Rechnung übernommen.</div>
+  </div>
+
+  <div class="card" data-step="4 · Ausgabe">
+    <h2>Rechnung erstellen</h2>
+    <button class="btn-primary" id="genPdfBtn" type="button">Rechnung als PDF erstellen</button>
+    <div class="note">Die Rechnung übernimmt die kalkulierten Positionen aus Schritt 2 — der Kunde zahlt den zugesagten Preis, unabhängig vom Beleg-Ergebnis.</div>
+  </div>
+
+  <footer>Lokaler Prototyp · keine Daten verlassen den Browser</footer>
+</div>
+
+<script>
+let rowId = 0;
+const posBody = document.getElementById('posBody');
+let lastOcrAmount = null;
+let lastOcrText = '';
+
+function addRow(name = '', qty = 1, price = '') {
+  rowId++;
+  const tr = document.createElement('tr');
+  tr.dataset.id = rowId;
+  tr.innerHTML = `
+    <td><input type="text" class="pos-name" value="${name}" placeholder="z. B. Zündelektrode"></td>
+    <td class="num"><input type="number" class="pos-qty" value="${qty}" min="0" step="1"></td>
+    <td class="num"><input type="number" class="pos-price" value="${price}" min="0" step="0.01" placeholder="0,00"></td>
+    <td class="del"><button class="del-btn" type="button" title="entfernen">×</button></td>
+  `;
+  tr.querySelectorAll('input').forEach(i => i.addEventListener('input', updateSummary));
+  tr.querySelector('.del-btn').addEventListener('click', () => { tr.remove(); updateSummary(); });
+  posBody.appendChild(tr);
+}
+
+// Startpositionen (Beispiel-Struktur, editierbar)
+addRow('Zündelektrode', 1, 68.00);
+addRow('Dichtung', 1, 14.00);
+addRow('Arbeitszeit', 1, 127.50);
+addRow('Anfahrt', 1, 35.00);
+
+document.getElementById('addRowBtn').addEventListener('click', () => addRow());
+
+function fmt(n) {
+  return n.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+}
+
+function getPositions() {
+  return Array.from(posBody.querySelectorAll('tr')).map(tr => {
+    const name = tr.querySelector('.pos-name').value || '(ohne Bezeichnung)';
+    const qty = parseFloat(tr.querySelector('.pos-qty').value) || 0;
+    const price = parseFloat(tr.querySelector('.pos-price').value) || 0;
+    return { name, qty, price, sum: qty * price };
+  });
+}
+
+function updateSummary() {
+  const positions = getPositions();
+  const zwischen = positions.reduce((a, p) => a + p.sum, 0);
+  const mwst = zwischen * 0.19;
+  const gesamt = zwischen + mwst;
+  document.getElementById('sumZwischen').textContent = fmt(zwischen);
+  document.getElementById('sumMwst').textContent = fmt(mwst);
+  document.getElementById('sumGesamt').textContent = fmt(gesamt);
+  updateMarginCheck();
+}
+updateSummary();
+
+// --- OCR ---
+const dropZone = document.getElementById('dropZone');
+const fileInput = document.getElementById('fileInput');
+const previewImg = document.getElementById('previewImg');
+const ocrStatus = document.getElementById('ocrStatus');
+const ocrStatusText = document.getElementById('ocrStatusText');
+const progressFill = document.getElementById('progressFill');
+const ocrResult = document.getElementById('ocrResult');
+const ocrFound = document.getElementById('ocrFound');
+const ocrRaw = document.getElementById('ocrRaw');
+
+['dragover', 'dragleave', 'drop'].forEach(evt => {
+  dropZone.addEventListener(evt, e => {
+    e.preventDefault();
+    dropZone.classList.toggle('drag', evt === 'dragover');
+  });
+});
+dropZone.addEventListener('drop', e => {
+  const file = e.dataTransfer.files[0];
+  if (file) handleFile(file);
+});
+fileInput.addEventListener('change', e => {
+  const file = e.target.files[0];
+  if (file) handleFile(file);
+});
+
+function handleFile(file) {
+  ocrStatus.style.display = 'block';
+  ocrStatusText.textContent = 'Datei ausgewählt: ' + file.name + ' — lade Vorschau…';
+  try {
+    const url = URL.createObjectURL(file);
+    previewImg.src = url;
+    previewImg.style.display = 'block';
+  } catch (err) {
+    ocrStatusText.textContent = 'Vorschau-Fehler: ' + err.message;
+  }
+  if (typeof Tesseract === 'undefined') {
+    ocrStatusText.textContent = 'OCR-Bibliothek konnte nicht geladen werden (Tesseract ist nicht verfügbar). Bild wurde ausgewählt, aber Texterkennung ist nicht möglich.';
+    progressFill.style.width = '0%';
+    return;
+  }
+  runOcr(file);
+}
+
+window.addEventListener('error', function(e) {
+  ocrStatus.style.display = 'block';
+  ocrStatusText.textContent = 'JS-Fehler: ' + e.message;
+});
+
+function extractAmount(text) {
+  // Suche gezielt nach Zeilen mit Summe/Gesamt/Total-Schlüsselwörtern
+  const lines = text.split('\n');
+  const keyword = /(gesamt|summe|total|zu\s*zahlen)/i;
+  const numPattern = /(\d{1,3}(?:[.,]\d{3})*[.,]\d{2})/;
+  let candidates = [];
+
+  lines.forEach(line => {
+    if (keyword.test(line)) {
+      const m = line.match(numPattern);
+      if (m) candidates.push(parseFloat(m[1].replace(/\./g, '').replace(',', '.')));
+    }
+  });
+
+  if (candidates.length > 0) {
+    return Math.max(...candidates);
+  }
+
+  // Fallback: größte gefundene Zahl im gesamten Text (meist der Gesamtbetrag)
+  const allMatches = [...text.matchAll(new RegExp(numPattern, 'g'))];
+  const allNums = allMatches.map(m => parseFloat(m[1].replace(/\./g, '').replace(',', '.')));
+  if (allNums.length > 0) return Math.max(...allNums);
+
+  return null;
+}
+
+async function runOcr(file) {
+  ocrStatus.style.display = 'block';
+  ocrResult.style.display = 'none';
+  document.getElementById('marginCheck').style.display = 'none';
+  ocrStatusText.textContent = 'Lese Beleg…';
+  progressFill.style.width = '0%';
+
+  try {
+    const { data } = await Tesseract.recognize(file, 'deu', {
+      logger: m => {
+        if (m.status === 'recognizing text') {
+          progressFill.style.width = Math.round(m.progress * 100) + '%';
+          ocrStatusText.textContent = 'Erkenne Text… ' + Math.round(m.progress * 100) + '%';
+        } else {
+          ocrStatusText.textContent = m.status;
+        }
+      }
+    });
+
+    lastOcrText = data.text;
+    lastOcrAmount = extractAmount(data.text);
+
+    ocrFound.textContent = lastOcrAmount !== null ? fmt(lastOcrAmount) : 'nicht erkannt — bitte manuell prüfen';
+    ocrRaw.textContent = data.text.trim().slice(0, 600);
+    ocrResult.style.display = 'block';
+    ocrStatus.style.display = 'none';
+    updateMarginCheck();
+  } catch (err) {
+    ocrStatusText.textContent = 'Fehler bei der Erkennung: ' + err.message;
+  }
+}
+
+function updateMarginCheck() {
+  const mc = document.getElementById('marginCheck');
+  const mv = document.getElementById('marginValue');
+  if (lastOcrAmount === null) { mc.style.display = 'none'; return; }
+
+  const positions = getPositions();
+  // Materialkosten = alle Positionen außer "Arbeitszeit" und "Anfahrt" (Heuristik über Namen)
+  const materialSum = positions
+    .filter(p => !/arbeitszeit|anfahrt|fahrt/i.test(p.name))
+    .reduce((a, p) => a + p.sum, 0);
+
+  if (materialSum === 0) { mc.style.display = 'none'; return; }
+
+  const diff = lastOcrAmount - materialSum;
+  const pct = (diff / materialSum) * 100;
+  const over = diff > 0.01;
+
+  mc.style.display = 'block';
+  mc.className = 'margin-check ' + (over ? 'pos' : 'neu');
+  mv.className = 'mc-value ' + (over ? 'warn' : 'ok');
+  mv.textContent = `Kalkuliert: ${fmt(materialSum)} · Beleg: ${fmt(lastOcrAmount)} · ${over ? '+' : ''}${pct.toFixed(1)}%`;
+}
+
+// --- PDF-Erzeugung ---
+document.getElementById('genPdfBtn').addEventListener('click', () => {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  const positions = getPositions();
+  const zwischen = positions.reduce((a, p) => a + p.sum, 0);
+  const mwst = zwischen * 0.19;
+  const gesamt = zwischen + mwst;
+
+  const name = document.getElementById('custName').value || '—';
+  const addr = document.getElementById('custAddr').value || '—';
+  const work = document.getElementById('custWork').value || '—';
+  const today = new Date().toLocaleDateString('de-DE');
+
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(18);
+  doc.text('Rechnung', 20, 25);
+
+  doc.setFontSize(10);
+  doc.setFont('helvetica', 'normal');
+  doc.text(`Datum: ${today}`, 20, 34);
+  doc.text(`Kundin/Kunde: ${name}`, 20, 40);
+  doc.text(`Adresse: ${addr}`, 20, 46);
+  doc.text(`Leistung: ${work}`, 20, 52);
+
+  let y = 66;
+  doc.setFont('helvetica', 'bold');
+  doc.text('Position', 20, y);
+  doc.text('Menge', 120, y);
+  doc.text('Einzelpreis', 145, y);
+  doc.text('Summe', 178, y);
+  doc.setLineWidth(0.3);
+  doc.line(20, y + 2, 190, y + 2);
+  doc.setFont('helvetica', 'normal');
+
+  positions.forEach(p => {
+    y += 8;
+    doc.text(p.name, 20, y);
+    doc.text(String(p.qty), 120, y);
+    doc.text(fmt(p.price), 145, y);
+    doc.text(fmt(p.sum), 178, y);
+  });
+
+  y += 6;
+  doc.line(20, y, 190, y);
+  y += 8;
+  doc.text('Zwischensumme', 145, y);
+  doc.text(fmt(zwischen), 178, y);
+  y += 6;
+  doc.text('MwSt. (19%)', 145, y);
+  doc.text(fmt(mwst), 178, y);
+  y += 8;
+  doc.setFont('helvetica', 'bold');
+  doc.text('Gesamt', 145, y);
+  doc.text(fmt(gesamt), 178, y);
+
+  y += 16;
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(9);
+  doc.text('Zahlungsziel: 14 Tage', 20, y);
+
+  doc.save(`Rechnung_${(name || 'Kunde').replace(/\s+/g, '_')}.pdf`);
+});
+</script>
+</body>
+</html>
